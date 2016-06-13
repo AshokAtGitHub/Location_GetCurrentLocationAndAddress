@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.ashok.location_basicexamplefromgoogle.MainActivity">
+
+    <TextView
+        android:id="@+id/titleCurrentLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Current Location:" />
+
+    <TextView
+        android:id="@+id/txt_latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleCurrentLocation"
+        android:layout_marginTop="1dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/blue"
+        android:textSize="@dimen/lat_long_text_size"
+        android:text="Latitude will be shown here"    />
+
+    <TextView
+        android:id="@+id/txt_longitude"
+        android:layout_below="@+id/txt_latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/blue"
+        android:textSize="@dimen/lat_long_text_size"
+        android:text="Longitude will be shown here"  />
+
+    <TextView
+        android:id="@+id/titleCurrentAddress"
+        android:layout_below="@+id/txt_longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_margin"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Current Address:" />
+
+    <TextView
+        android:id="@+id/txt_addressLine"
+        android:layout_below="@+id/titleCurrentAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/blue"
+        android:layout_marginTop="1dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="@dimen/lat_long_text_size"
+        android:text="AddressLine will be shown here"  />
+
+    <TextView
+        android:id="@+id/txt_cityAndState"
+        android:layout_below="@+id/txt_addressLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/blue"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="20dp"
+        android:textIsSelectable="true"
+        android:textSize="@dimen/lat_long_text_size"
+        android:text="City and State will be shown here"  />
+
+    <TextView
+        android:id="@+id/txt_country"
+        android:layout_below="@+id/txt_cityAndState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/blue"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="20dp"
+        android:textIsSelectable="true"
+        android:textSize="@dimen/lat_long_text_size"
+        android:text="Country will be shown here"  />
+
+    <!-- divider -->
+    <View
+        android:id="@+id/divider_1"
+        android:layout_below="@+id/txt_country"
+        android:layout_marginTop="@dimen/topMargin_divider_1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_50pct" />
+
+    <TextView
+        android:id="@+id/txt_workInWiFi"
+        android:layout_below="@+id/divider_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textSize="@dimen/lat_long_text_size"
+        android:textStyle="normal"
+        android:text="Note: Reverse-Geocoding need WiFi or Mobile-Data-Network connection to get 'ADDRESS' from Latitude, Longitude"  />
+
+    <!-- divider -->
+    <View
+        android:id="@+id/divider_2"
+        android:layout_below="@+id/txt_workInWiFi"
+        android:layout_marginTop="@dimen/text_margin"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_50pct" />
+
+    <TextView
+        android:id="@+id/txt_error"
+        android:layout_below="@+id/divider_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textStyle="italic"
+        android:textColor="@color/black"
+        android:textSize="@dimen/lat_long_text_size"
+        android:text="** Network-Error if any, will be shown here"  />
+
+</RelativeLayout>
