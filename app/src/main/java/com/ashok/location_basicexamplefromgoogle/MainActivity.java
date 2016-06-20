@@ -11,7 +11,7 @@ package com.ashok.location_basicexamplefromgoogle;
  *
  *     ** Notes:
  *        (1) For getting Location, this app use the RUN-TIme-Permission as required by Google
- *            since new Android-Marshmallow 6.0 API 23 release.
+ *            since Android-Marshmallow 6.0 API 23 release.
  *        (2) This sample uses Google Play services (GoogleApiClient) which do not need
  *            to 'authenticate'
  *
@@ -51,9 +51,9 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements
                                    ConnectionCallbacks, OnConnectionFailedListener {
     protected static final String TAG = "agk";
-    protected static int REQUEST_LOCATION_CODE = 29;
-    protected static int REQUEST_RESOLVE_ERROR = 15;
-    protected static int ERROR_CODE_CONN_FAILED = 101;
+    protected static int REQUEST_LOCATION_CODE = 1001;
+    protected static int REQUEST_RESOLVE_ERROR = 1002;
+    protected static int ERROR_CODE_CONN_FAILED = 1003;
 
     protected GoogleApiClient mGoogleApiClient;//provide entry point to Google Play Services
     protected Location mLastLocation;//Lat, Longitude of a location
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onStart();
         mGoogleApiClient.connect();
     }
-    //-------------------------------------------------
+    //----------------------------------------------------
     @Override
     protected void onStop() {
         super.onStop();
@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements
         //ak- June 2, 2016
         // AUTO-CODE -- Permission-Check added using Android Stuio suggestion !!! Red-bulb-auto insert
         // Google new policy of Run-time-permission check.
+        Log.i(TAG, "Enter:onConnected()");
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -129,18 +130,18 @@ public class MainActivity extends AppCompatActivity implements
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
 
-            Log.i(TAG, "onConnected():Permission-NOT-Granted.Request Permission");
+            Log.i(TAG, "Permission-NOT-Granted:onConnected(). Request Permission");
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_LOCATION_CODE);
         } else {
-            Log.i(TAG, "isLocationPermissionGranted():Permission-Granted.");
+            Log.i(TAG, "Permission-Granted:onConnected()");
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mLastLocation == null) {//call 1 more time to get location (In case No location was set initially
                 Log.i(TAG, "onConnect():Calling getLastLocation() again.");
                 mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             }
             if (mLastLocation != null) {
-                display_lat_lng_cityName(mLastLocation);
+                displayLatLong_and_streetAddr(mLastLocation);
                 //clear Error line
                 mTxtError.setText(" ");
             } else {
@@ -149,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements
                 mTxtError.setTextColor(getResources().getColor(R.color.red));
                 //Toast.makeText(this, R.string.no_location_detected, Toast.LENGTH_LONG).show();
             }
-
         }//permission-granted
     }//onConnected()
     //-----------------------------------------------------------------
@@ -159,13 +159,14 @@ public class MainActivity extends AppCompatActivity implements
     public void onRequestPermissionsResult(int requestCode,
                                            String[] permissions,
                                            int[] grantResults){
+        Log.i(TAG, "Enter:onRequestPermissionsResult()");
         if (requestCode == REQUEST_LOCATION_CODE){
             if ((grantResults.length == 1)
                 && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 //can use Location-API here !!
-                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                 if (mLastLocation != null) {
-                    display_lat_lng_cityName(mLastLocation);
+                    displayLatLong_and_streetAddr(mLastLocation);
                     //clear Error line
                     mTxtError.setText(" ");
                 } else {
@@ -176,16 +177,16 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
             else {
-                Log.i(TAG, "onRequestPermissionResult():Permission-NOT-Granted.Request Permission");
-                mTxtError.setText("onRequestPermissionResult():Permission-NOT-granted");
+                Log.i(TAG, "Permission-NOT-Granted:onRequestPermissonsResult()");
+                mTxtError.setText("Permission-NOT-granted:onRequestsPermissionsResult()");
                 mTxtError.setTextColor(getResources().getColor(R.color.red));
             }
         }
     }
     /** ---------------------------------------------------
-     * Display Latitute, Longitude and City name
+     * Display Latitute, Longitude and City name using Reverse-GeoCoding
      */
-    protected void display_lat_lng_cityName(Location mLastLocation)  {
+    protected void displayLatLong_and_streetAddr(Location mLastLocation)  {
         Double latitude, longitude;
         String addressLine = "addressLine";
         String cityAndState = "City&stateName";
@@ -193,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements
         latitude = mLastLocation.getLatitude();
         longitude = mLastLocation.getLongitude();
 
-        //Get City, State anc Country name
+        //Get City, State anc Country name by using Reverse-Geocoding
         Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
         try {//Reverse GeoCoding - Get street-address from Latitude, Longitude
             List<Address> address = geoCoder.getFromLocation(latitude, longitude,1);
@@ -209,7 +210,6 @@ public class MainActivity extends AppCompatActivity implements
             mTxtError.setText("Error:ReverseGeoCoding:IllegalArgs:display_lat_lng_cityName()");
             iae.printStackTrace();
         }
-
         mLatitudeText.setText(String.format("%s: %f", mLatitudeLabel,latitude));
         mLongitudeText.setText(String.format("%s: %f", mLongitudeLabel,longitude));
         mTxtAddressLine.setText(addressLine);
@@ -230,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
         // onConnectionFailed.
+        
         int errorCodeForConnectionFailed = connectionResult.getErrorCode();
         String errorCodeStr = getErrorCodeStr_onConnenctionFailed(errorCodeForConnectionFailed);
         Log.i(TAG, "onConnectionFailed():ErrorCode=(" + errorCodeForConnectionFailed + ")"+
